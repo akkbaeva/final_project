@@ -20,11 +20,11 @@ class TestCompanyModel(TestCase):
 
     def test_create_fail(self):
         company_info = {
-            'name': 1,
+            'name': 'TestName',
             'image': '7.jpg',
             'description': 'TestDescription'
         }
-        with self.assertRaises(ValueError):
+        with self.assertRaises(Exception):
             company = Company.objects.create(**company_info)
 
     def test_update(self):
@@ -51,7 +51,6 @@ class TestCompanyModel(TestCase):
         company = Company.objects.create(**company_info)
         pk = company.pk
         company.delete()
-        company.refresh_from_db()
         with self.assertRaises(Company.DoesNotExist):
             Company.objects.get(pk=pk)
 
@@ -61,14 +60,12 @@ class TestDishModel(TestCase):
         dish_info = {
             'name': 'TestName',
             'image': '7.jpg',
-            'company': 'TestCompany',
             'category': 'VEGETARIAN',
             'component': 'TestComponent'
         }
         dish = Dish.objects.create(**dish_info)
         self.assertEqual(dish.name, dish_info['name'])
         self.assertEqual(dish.image, dish_info['image'])
-        self.assertEqual(dish.company, dish_info['company'])
         self.assertEqual(dish.category, dish_info['category'])
         self.assertEqual(dish.component, dish_info['component'])
 
@@ -87,7 +84,6 @@ class TestDishModel(TestCase):
         dish_info = {
             'name': 'TestName',
             'image': '7.jpg',
-            'company': 'TestCompany',
             'category': 'VEGETARIAN',
             'component': 'TestComponent'
         }
@@ -98,7 +94,6 @@ class TestDishModel(TestCase):
         dish.refresh_from_db()
         self.assertEqual(dish.name, new_name)
         self.assertEqual(dish.image, dish_info['image'])
-        self.assertEqual(dish.company, dish_info['company'])
         self.assertEqual(dish.category, dish_info['category'])
         self.assertEqual(dish.component, dish_info['component'])
 
@@ -106,13 +101,11 @@ class TestDishModel(TestCase):
         dish_info = {
             'name': 'TestName',
             'image': '7.jpg',
-            'company': 'TestCompany',
             'category': 'VEGETARIAN',
             'component': 'TestComponent'
         }
         dish = Dish.objects.create(**dish_info)
         pk = dish.pk
         dish.delete()
-        dish.refresh_from_db()
         with self.assertRaises(Dish.DoesNotExist):
             Dish.objects.get(pk=pk)
