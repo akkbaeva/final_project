@@ -38,9 +38,12 @@ INSTALLED_APPS = [
     'rest_framework',
     'category_food',
     'food_user',
+    'django_filters',
+    'singer_album',
 ]
 
 REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKEND': ['django_filters.rest_framework.DjangoFilerBackend'],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.BasicAuthentication',

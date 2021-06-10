@@ -1,8 +1,20 @@
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
+from rest_framework_simplejwt.serializers import TokenObtainSerializer
 
-from food_user.models import FoodUser
+from category_food.serializers import DishSerializer
+from food_user.models import FoodUser, Carriage
+
+
+class FoodObtainPairSerializer(TokenObtainSerializer):
+
+    @classmethod
+    def get_token(cls, user):
+        token = super(FoodObtainPairSerializer, cls).get_token(user)
+
+        token['username'] = user.username
+        return token
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -40,3 +52,18 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         return user
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FoodUser
+        fields = ('username', 'number')
+
+
+class CarriageSerializer(serializers.ModelSerializer):
+    user = UserSerializer
+    dish = DishSerializer
+
+    class Meta:
+        model = Carriage
+        fields = ('user', 'dish')
